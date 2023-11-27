@@ -114,15 +114,111 @@ st.scatter_chart(
 # ).properties(
 #     title='Scatter Plot - Age vs Purchase Amount'
 # )
+top_categories = df.groupby('Category')['Purchase Amount (USD)'].sum().nlargest(5)  # Select top 5 categories
+
+# Streamlit App
+st.title("Top Categories - Pie Chart")
+
+# Create a pie chart using Matplotlib
+fig, ax = plt.subplots()
+ax.pie(top_categories, labels=top_categories.index, autopct='%1.1f%%', startangle=90)
+ax.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+ax.set_title("Top Categories Distribution")
+st.pyplot(fig)
+
+color_counts = df['Payment Method'].value_counts()
+
+# Streamlit App
+st.title("Donut Chart - Payment Method Distribution")
+
+# Create a donut chart using Matplotlib
+fig, ax = plt.subplots()
+ax.pie(color_counts, labels=color_counts.index, autopct='%1.1f%%', startangle=90, wedgeprops=dict(width=0.3))
+ax.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+
+# Add a white circle in the center to create the donut effect
+centre_circle = plt.Circle((0,0),0.70,fc='white')
+fig = plt.gcf()
+fig.gca().add_artist(centre_circle)
+
+ax.set_title("Donut Chart - Payment Method Distribution")
+st.pyplot(fig)
+
+# Streamlit App
+st.title("Bubble Plot - Age vs Purchase Amount vs Review Rating")
+
+# Assuming 'Age', 'Purchase Amount (USD)', and 'Review Rating' are columns in your dataset
+fig, ax = plt.subplots()
+
+# Scatter plot with bubbles
+scatter = ax.scatter(
+    df['Age'],
+    df['Purchase Amount (USD)'],
+    c=df['Review Rating'],
+    cmap='viridis',  # You can choose a different colormap
+    s=df['Review Rating'] * 20,  # Adjust the size of the bubbles based on 'Review Rating'
+    alpha=0.7,
+    edgecolors="w",
+    linewidths=0.5,
+)
+
+# Add colorbar
+cbar = plt.colorbar(scatter)
+cbar.set_label('Review Rating')
+
+# Set labels and title
+ax.set_xlabel('Age')
+ax.set_ylabel('Purchase Amount (USD)')
+ax.set_title('Bubble Plot - Age vs Purchase Amount vs Review Rating')
+
+# Show the plot in Streamlit
+st.pyplot(fig)
+
+
 
 st.title("Age Distribution Boxplot")
-
 # Display the boxplot using matplotlib
 fig, ax = plt.subplots()
 ax.boxplot(df['Age'])
 ax.set_xlabel("Age")
 ax.set_ylabel("Distribution")
 ax.set_title("Boxplot - Age Distribution")
+
+# Show the plot in Streamlit
+st.pyplot(fig)
+
+
+df['Date'] = pd.to_datetime(df['Date']).dt.date  # Extract only the date component
+
+# Streamlit App
+st.title("Trends in Purchase Amount over Date")
+
+# Create a line chart using Matplotlib
+fig, ax = plt.subplots()
+ax.plot(df['Date'], df['Purchase Amount (USD)'], marker='o', linestyle='-')
+
+# Set labels and title
+ax.set_xlabel("Date")
+ax.set_ylabel("Purchase Amount (USD)")
+ax.set_title("Trends in Purchase Amount over Date")
+
+# Show the plot in Streamlit
+st.pyplot(fig)
+
+
+df['Date'] = pd.to_datetime(df['Date']).dt.date  # Extract only the date component
+
+# Streamlit App
+st.title("Frequency of Purchases over Time")
+
+# Create a line chart using Matplotlib
+fig, ax = plt.subplots()
+ax.plot(df['Date'], df['Frequency of Purchases'], marker='o', linestyle='-')
+
+# Set labels and title
+ax.set_xlabel("Date")
+ax.set_ylabel("Frequency of Purchases")
+ax.set_title("Frequency of Purchases over Time")
 
 # Show the plot in Streamlit
 st.pyplot(fig)
