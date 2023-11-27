@@ -5,6 +5,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import altair as alt
 from geopy.geocoders import Nominatim
+import geopy
+
 
 file_path = "shopping_trends.csv" 
 df = pd.read_csv(file_path)
@@ -113,11 +115,18 @@ st.scatter_chart(
 #     title='Scatter Plot - Age vs Purchase Amount'
 # )
 
-# st.altair_chart(chart, use_container_width=True)
-# # Box Plots
+st.title("Age Distribution Boxplot")
 
-# df = df[['Location']]
-   
-#     columns=['lat', 'lon'])
+# Display the boxplot using matplotlib
+fig, ax = plt.subplots()
+ax.boxplot(df['Age'])
+ax.set_xlabel("Age")
+ax.set_ylabel("Distribution")
+ax.set_title("Boxplot - Age Distribution")
 
-# st.map(df)
+# Show the plot in Streamlit
+st.pyplot(fig)
+
+
+
+  
